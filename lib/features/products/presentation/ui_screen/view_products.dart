@@ -102,6 +102,93 @@ class ViewProducts extends StatelessWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title with Dropdown Icon
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "حلويات غربية",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Icon(Icons.keyboard_arrow_down, color: Colors.black87),
+                    ],
+                  ),
+                  const SizedBox(height: 12), // Spacing
+
+                  // Horizontal Buttons
+                  Row(
+                    children: [
+                      // First Button
+                      Container(
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.shade100,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Text(
+                          "جاتوه",
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8), // Spacing between buttons
+
+                      // Second Button
+                      Container(
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.shade100,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Text(
+                          "تورت",
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8), // Spacing between buttons
+
+                      // Third Button with Border
+                      Container(
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.blue),
+                        ),
+                        child: const Text(
+                          "جميع الحلويات غريبة",
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
             BlocConsumer<DisplayProductsCubit, DisplayProductsState>(
               listener: (context, state) {},
               builder: (context, state) {
@@ -119,26 +206,27 @@ class ViewProducts extends StatelessWidget {
                       controller: scrollController
                         ..addListener(
                           () {
-                            if (cubit.isLoading &&
-                                (scrollController.position.pixels ==
-                                    scrollController
-                                        .position.maxScrollExtent)) {
-                              // cubit.getProducts(product);
+                            if (cubit.hasMore &&
+                                scrollController.position.pixels ==
+                                    scrollController.position.maxScrollExtent) {
+                              cubit.getProducts(ProductRequest(
+                                  pageNamber: cubit.currentPage++,
+                                  ProductsCountPerPage: 5));
                             }
                           },
                         ),
-                      itemCount: cubit.allItems.length + 1,
+                      itemCount:
+                          cubit.allItems.length + (state.isLoading ? 1 : 0),
                       itemBuilder: (context, index) {
                         if (index == cubit.allItems.length) {
                           return const Center(
                               child: CircularProgressIndicator());
                         }
 
-                        return const ProductItem(
-                          productName: 'mmmm',
-                          img:
-                              'https://stg.koueider.com/wp-content/uploads/2024/01/4016042-thumb.jpg',
-                          price: 20,
+                        return ProductItem(
+                          productName: cubit.allItems[index].name,
+                          img: cubit.allItems[index].img,
+                          price: cubit.allItems[index].price,
                         );
                       },
                     ),

@@ -8,5 +8,9 @@ final class DisplayProductsInitial extends DisplayProductsState {}
 
 
 final class DisplayProductsLoading extends DisplayProductsState {}
-final class DisplayProductsSuccess extends DisplayProductsState {}
+final class DisplayProductsSuccess extends DisplayProductsState {
+  final bool isLoading;
+
+  DisplayProductsSuccess(this.isLoading);
+}
 final class DisplayProductsFailure extends DisplayProductsState {}

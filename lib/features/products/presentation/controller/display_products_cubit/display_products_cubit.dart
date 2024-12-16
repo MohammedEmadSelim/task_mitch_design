@@ -17,18 +17,28 @@ class DisplayProductsCubit extends Cubit<DisplayProductsState> {
   bool isLoading = true;
   bool hasMore = false;
   int currentPage =1;
+  int totalPages= 0;
 
 
   Future<void> getProducts(ProductRequest product) async {
-    emit(DisplayProductsLoading());
+    //avoid display every call
+    if(currentPage==1){
+      emit(DisplayProductsLoading());
+    }
     final res = await getProductsUseCase.call(product);
     res.fold(
       (left) {
         emit(DisplayProductsFailure());
       },
       (right) {
-        allItems.addAll(right);
-        emit(DisplayProductsSuccess());
+        allItems.addAll(right.products);
+
+        if(currentPage<right.paginationEntity.totalPages){
+          hasMore =true;
+        }else{
+          hasMore =false;
+        }
+        emit(DisplayProductsSuccess((currentPage<right.paginationEntity.totalPages)));
       },
     );
   }

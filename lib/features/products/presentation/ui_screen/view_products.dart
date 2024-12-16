@@ -2,7 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mitch_designs_task/core/api_service/requestModels/product_request.dart';
+import 'package:mitch_designs_task/core/constants/icons.dart';
 import 'package:mitch_designs_task/core/theme/colors.dart';
+import 'package:mitch_designs_task/core/utils/filter_sheet.dart';
+import 'package:mitch_designs_task/core/widgets/custom_svg.dart';
+import 'package:mitch_designs_task/core/widgets/tap_effect.dart';
 import 'package:mitch_designs_task/features/products/presentation/components/custom_bottom_navigation_bar.dart';
 import 'package:mitch_designs_task/features/products/presentation/components/product_item.dart';
 import 'package:mitch_designs_task/features/products/presentation/controller/display_products_cubit/display_products_cubit.dart';
@@ -99,142 +103,157 @@ class ViewProducts extends StatelessWidget {
             ),
           ),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+        body: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Title with Dropdown Icon
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        "حلويات غربية",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
+                      // Title with Dropdown Icon
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            "حلويات غربية",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Icon(Icons.keyboard_arrow_down,
+                              color: Colors.black87),
+                        ],
                       ),
-                      SizedBox(width: 8),
-                      Icon(Icons.keyboard_arrow_down, color: Colors.black87),
+                      const SizedBox(height: 12), // Spacing
+
+                      // Horizontal Buttons
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // First Button
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: AppColors.blue.withOpacity(0.4),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Text(
+                              "جاتوه",
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8), // Spacing between buttons
+
+                          // Second Button
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: AppColors.blue.withOpacity(0.4),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Text(
+                              "تورت",
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8), // Spacing between buttons
+
+                          // Third Button with Border
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: AppColors.blue.withOpacity(0.4),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: AppColors.darkBlue),
+                            ),
+                            child: const Text(
+                              "جميع الحلويات غريبة",
+                              style: TextStyle(
+                                color: AppColors.darkBlue,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 12), // Spacing
-
-                  // Horizontal Buttons
-                  Row(
-                    children: [
-                      // First Button
-                      Container(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.shade100,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Text(
-                          "جاتوه",
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8), // Spacing between buttons
-
-                      // Second Button
-                      Container(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.shade100,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Text(
-                          "تورت",
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8), // Spacing between buttons
-
-                      // Third Button with Border
-                      Container(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.blue),
-                        ),
-                        child: const Text(
-                          "جميع الحلويات غريبة",
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            BlocConsumer<DisplayProductsCubit, DisplayProductsState>(
-              listener: (context, state) {},
-              builder: (context, state) {
-                if (state is DisplayProductsLoading) {
-                  return Expanded(
-                      child: Container(
-                          child: const Center(
-                    child: CircularProgressIndicator(),
-                  )));
-                }
-                if (state is DisplayProductsSuccess) {
-                  var cubit = context.read<DisplayProductsCubit>();
-                  return Expanded(
-                    child: ListView.builder(
-                      controller: scrollController
-                        ..addListener(
-                          () {
-                            if (cubit.hasMore &&
-                                scrollController.position.pixels ==
-                                    scrollController.position.maxScrollExtent) {
-                              cubit.getProducts(ProductRequest(
-                                  pageNamber: cubit.currentPage++,
-                                  ProductsCountPerPage: 5));
+                ),
+                BlocConsumer<DisplayProductsCubit, DisplayProductsState>(
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    if (state is DisplayProductsLoading) {
+                      return Expanded(
+                          child: Container(
+                              child: const Center(
+                        child: CircularProgressIndicator(),
+                      )));
+                    }
+                    if (state is DisplayProductsSuccess) {
+                      var cubit = context.read<DisplayProductsCubit>();
+                      return Expanded(
+                        child: ListView.builder(
+                          controller: scrollController
+                            ..addListener(
+                              () {
+                                if (cubit.hasMore &&
+                                    scrollController.position.pixels ==
+                                        scrollController
+                                            .position.maxScrollExtent) {
+                                  cubit.getProducts(ProductRequest(
+                                      pageNamber: cubit.currentPage++,
+                                      ProductsCountPerPage: 5));
+                                }
+                              },
+                            ),
+                          itemCount:
+                              cubit.allItems.length + (state.isLoading ? 1 : 0),
+                          itemBuilder: (context, index) {
+                            if (index == cubit.allItems.length) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
                             }
+
+                            return ProductItem(
+                              productName: cubit.allItems[index].name,
+                              img: cubit.allItems[index].img,
+                              price: cubit.allItems[index].price,
+                            );
                           },
                         ),
-                      itemCount:
-                          cubit.allItems.length + (state.isLoading ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (index == cubit.allItems.length) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-
-                        return ProductItem(
-                          productName: cubit.allItems[index].name,
-                          img: cubit.allItems[index].img,
-                          price: cubit.allItems[index].price,
-                        );
-                      },
-                    ),
-                  );
-                }
-                return Container();
-              },
-            )
+                      );
+                    }
+                    return Container();
+                  },
+                )
+              ],
+            ),
+            Positioned(
+                left: 10,
+                bottom: 300,
+                child: TapEffect(
+                    onClick: () {
+                      showCustomDialog(context);
+                    },
+                    child: RepaintBoundary(child: CustomSvgImage(image: AppICons.sort))))
           ],
         ),
         bottomNavigationBar: const CustomBottomNavigationBar(),

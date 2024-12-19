@@ -17,7 +17,7 @@ class GetProductsUseCase extends UseCaseWithParam<ProductResponseEntity, Product
   @override
   Future<Either<Failure, ProductResponseEntity>> call(
       ProductRequest paramEntity) {
-    return baseProductsRepository.getProducts(paramEntity.pageNamber, paramEntity.ProductsCountPerPage);
+    return baseProductsRepository.getProducts(paramEntity);
   }
 
 }

@@ -1,4 +1,5 @@
 import 'package:either_dart/src/either.dart';
+import 'package:mitch_designs_task/core/api_service/requestModels/product_request.dart';
 import 'package:mitch_designs_task/core/exceptions/exceptions.dart';
 import 'package:mitch_designs_task/core/exceptions/failure.dart';
 import 'package:mitch_designs_task/features/products/data/data_source/products_remote_data_source.dart';
@@ -15,9 +16,9 @@ class ProductsRepository extends BaseProductsRepository{
   ProductsRepository(this.baseProductsRemoteDataSource);
 
   @override
-  Future<Either<Failure,ProductResponseEntity>> getProducts(int pageNumber, int productsCount) async{
+  Future<Either<Failure,ProductResponseEntity>> getProducts(ProductRequest productRequest) async{
    try{
-     var res  = await  baseProductsRemoteDataSource.getProducts(pageNumber, productsCount);
+     var res  = await  baseProductsRemoteDataSource.getProducts(productRequest);
      return Right(ProductResponseMapper.mapToProductResponseEntity(res));
    }
    on CustomException catch (e){

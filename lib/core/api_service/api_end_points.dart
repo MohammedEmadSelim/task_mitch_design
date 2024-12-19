@@ -4,7 +4,7 @@ class EndPoints{
 
 
 
-  static const String  products ='$domain/products/filter';
+  static const String  products ='$domain/products/filter?';
 
 
 

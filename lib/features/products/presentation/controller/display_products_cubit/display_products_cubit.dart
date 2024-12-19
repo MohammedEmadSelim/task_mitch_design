@@ -11,18 +11,25 @@ class DisplayProductsCubit extends Cubit<DisplayProductsState> {
   DisplayProductsCubit() : super(DisplayProductsInitial());
   GetProductsUseCase getProductsUseCase = sl.get<GetProductsUseCase>();
 
-
-
-  List<ProductEntity> allItems=[];
+  List<ProductEntity> allItems = [];
   bool isLoading = true;
   bool hasMore = false;
-  int currentPage =1;
-  int totalPages= 0;
+  int currentPage = 1;
 
 
+   String sortingCriteria = 'price';
+   String sortingManagement = 'ASC';
+   String groupValue ='price';
+
+  void changeGroupValue(String val){
+    groupValue = val;
+    emit(DisplayProductsChangeGroupValue());
+  }
   Future<void> getProducts(ProductRequest product) async {
+    product.sortingCriteria = sortingCriteria;
+    product.sortingArrangement = sortingManagement;
     //avoid display every call
-    if(currentPage==1){
+    if (currentPage == 1) {
       emit(DisplayProductsLoading());
     }
     final res = await getProductsUseCase.call(product);
@@ -33,13 +40,18 @@ class DisplayProductsCubit extends Cubit<DisplayProductsState> {
       (right) {
         allItems.addAll(right.products);
 
-        if(currentPage<right.paginationEntity.totalPages){
-          hasMore =true;
-        }else{
-          hasMore =false;
+        if (currentPage < right.paginationEntity.totalPages) {
+          hasMore = true;
         }
-        emit(DisplayProductsSuccess((currentPage<right.paginationEntity.totalPages)));
+
+        emit(DisplayProductsSuccess(
+            (currentPage < right.paginationEntity.totalPages)));
       },
     );
   }
+ void selectArrangement(){
+ emit(DisplayProductsSelectArrangement());
+
+ }
+
 }

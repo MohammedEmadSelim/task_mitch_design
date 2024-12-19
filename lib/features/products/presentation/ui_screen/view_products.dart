@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mitch_designs_task/core/api_service/requestModels/product_request.dart';
 import 'package:mitch_designs_task/core/constants/icons.dart';
 import 'package:mitch_designs_task/core/theme/colors.dart';
-import 'package:mitch_designs_task/core/utils/filter_sheet.dart';
+import 'package:mitch_designs_task/core/utils/filter/filter_sheet.dart';
 import 'package:mitch_designs_task/core/widgets/custom_svg.dart';
 import 'package:mitch_designs_task/core/widgets/tap_effect.dart';
 import 'package:mitch_designs_task/features/products/presentation/components/custom_bottom_navigation_bar.dart';
@@ -20,7 +20,10 @@ class ViewProducts extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => DisplayProductsCubit()
-        ..getProducts(ProductRequest(pageNamber: 1, ProductsCountPerPage: 5)),
+        ..getProducts(ProductRequest(
+            pageNumber: 1,
+            productsCountPerPage: 5,
+          )),
       child: Scaffold(
         backgroundColor: AppColors.lightGrey,
         appBar: AppBar(
@@ -56,7 +59,7 @@ class ViewProducts extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     // Handle dropdown tap
-                    print("Location dropdown tapped");
+
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -198,7 +201,17 @@ class ViewProducts extends StatelessWidget {
                   ),
                 ),
                 BlocConsumer<DisplayProductsCubit, DisplayProductsState>(
-                  listener: (context, state) {},
+                  buildWhen: (previous, current) =>
+                      current is DisplayProductsSuccess ||
+                      current is DisplayProductsFailure ||
+                      current is DisplayProductsLoading,
+                  listener: (context, state) {
+                    if(state is DisplayProductsFailure){
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('An Error Occurred')),
+                      );
+                    }
+                  },
                   builder: (context, state) {
                     if (state is DisplayProductsLoading) {
                       return Expanded(
@@ -218,9 +231,13 @@ class ViewProducts extends StatelessWidget {
                                     scrollController.position.pixels ==
                                         scrollController
                                             .position.maxScrollExtent) {
+                                  // save request from multiple calls
+                                  cubit.hasMore = false;
+
                                   cubit.getProducts(ProductRequest(
-                                      pageNamber: cubit.currentPage++,
-                                      ProductsCountPerPage: 5));
+                                    pageNumber: (cubit.currentPage++),
+                                    productsCountPerPage: 5,
+                                  ));
                                 }
                               },
                             ),
@@ -246,14 +263,24 @@ class ViewProducts extends StatelessWidget {
                 )
               ],
             ),
-            Positioned(
-                left: 10,
-                bottom: 300,
-                child: TapEffect(
-                    onClick: () {
-                      showCustomDialog(context);
-                    },
-                    child: RepaintBoundary(child: CustomSvgImage(image: AppICons.sort))))
+            BlocConsumer<DisplayProductsCubit, DisplayProductsState>(
+              listener: (context, state) {
+                // TODO: implement listener
+              },
+              builder: (context, state) {
+                DisplayProductsCubit cubit =
+                    context.read<DisplayProductsCubit>();
+                return Positioned(
+                    left: 10,
+                    bottom: 300,
+                    child: TapEffect(
+                        onClick: () {
+                          showCustomDialog(context, cubit);
+                        },
+                        child: RepaintBoundary(
+                            child: CustomSvgImage(image: AppIcons.sort))));
+              },
+            )
           ],
         ),
         bottomNavigationBar: const CustomBottomNavigationBar(),

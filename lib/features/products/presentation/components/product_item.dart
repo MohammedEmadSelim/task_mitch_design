@@ -53,7 +53,7 @@ class ProductItem extends StatelessWidget {
                     width: 5.w,
                   ),
                   CustomSvgImage(
-                    image: AppICons.people,
+                    image: AppIcons.people,
                   ),
                 ],
               ),
@@ -77,7 +77,7 @@ class ProductItem extends StatelessWidget {
                               color: AppColors.green),
                         ),
                         SizedBox(width: 4.w),
-                        CustomSvgImage(image: AppICons.stars),
+                        CustomSvgImage(image: AppIcons.stars),
                       ],
                     ),
                   ),

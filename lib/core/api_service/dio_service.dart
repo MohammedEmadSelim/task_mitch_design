@@ -16,13 +16,13 @@ class DioFinalHelper {
   }
 
 
-  static Future<dynamic> getData({
+  static Future<Response> getData({
     required String method,
-    Map<String, dynamic>? query,
+    Map<String, dynamic>? param,
   }) async {
     return await dio.get(
       method,
-      data: query,
+      queryParameters: param,
     );
   }
 }

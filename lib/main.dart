@@ -5,6 +5,7 @@ import 'package:mitch_designs_task/core/observer/bloc_observer.dart';
 import 'package:mitch_designs_task/core/service_locator/locator.dart'
     as locator;
 import 'package:mitch_designs_task/features/products/presentation/ui_screen/view_products.dart';
+import 'package:mitch_designs_task/splash.dart';
 
 void main() async {
   DioFinalHelper.init();
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ViewProducts(),
+      home: SplashScreen(),
     );
   }
 }

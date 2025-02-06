@@ -27,7 +27,7 @@ void showCustomDialog(BuildContext context, DisplayProductsCubit cubit) {
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: SizedBox(
-                  height: 250.h,
+                  height: 300.h,
                   width: MediaQuery.of(context).size.width * 1.2,
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
@@ -65,6 +65,7 @@ void showCustomDialog(BuildContext context, DisplayProductsCubit cubit) {
                           ),
                           value: 'date',
                           groupValue: cubit.groupValue,
+
                           onChanged: (value) {
                             cubit.changeGroupValue(value as String);
                             cubit.allItems.clear();
